@@ -14,7 +14,7 @@ $ErrorActionPreference = 'Stop'
 # Configuration
 # ==================================================
 $SubscriptionId    = "6a6cb5d4-9c05-4211-b604-b4a53fed3284"
-$ResourceGroupName = "TestRGRemeWorkOrNot"
+$ResourceGroupName = "remediationtag"
 
 # Keep TRUE during testing
 $DryRun = $true
