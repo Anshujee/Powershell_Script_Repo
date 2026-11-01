@@ -22,7 +22,7 @@ $ErrorActionPreference = "Stop"
 # ============================================================
 
 # Keep TRUE during initial testing
-$DryRun = $false
+$DryRun = $true
 
 # Built-in Azure Policy:
 # Inherit a tag from the resource group
