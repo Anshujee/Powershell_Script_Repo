@@ -1,0 +1,44 @@
+
+# Azure Policy Tag Inheritance Remediation Pipeline
+
+trigger: none
+pr: none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  # Replace this with your Azure DevOps service connection name
+  azureServiceConnection: 'YOUR-AZURE-SERVICE-CONNECTION'
+
+  # PowerShell script location
+  scriptPath: '$(Build.SourcesDirectory)/Rem-TagV5.ps1'
+
+steps:
+
+# Step 1: Checkout repository
+- checkout: self
+  displayName: 'Checkout Source Code'
+
+# Step 2: Execute Azure Policy remediation script
+- task: AzurePowerShell@5
+  displayName: 'Execute Azure Policy Tag Remediation'
+  inputs:
+    azureSubscription: '$(azureServiceConnection)'
+    ScriptType: 'FilePath'
+    ScriptPath: '$(scriptPath)'
+    azurePowerShellVersion: 'LatestVersion'
+    pwsh: true
+    errorActionPreference: 'stop'
+    FailOnStandardError: false
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+  timeoutInMinutes: 90
+
+# Step 3: Publish CSV remediation report
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Remediation CSV Report'
+  condition: succeededOrFailed()
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifact: 'Azure-Policy-Remediation-Report'
+    publishLocation: 'pipeline'
